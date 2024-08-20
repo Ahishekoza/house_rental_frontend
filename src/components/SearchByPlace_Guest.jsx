@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { CiSearch, CiCirclePlus, CiCircleMinus } from "react-icons/ci";
@@ -9,10 +10,10 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 
-const SearchByPlace_Guest = () => {
+const SearchByPlace_Guest = ({ handleSearchQuery }) => {
   // --- On basis of total number of quests we will suggest the user how many number of beds or rooms he need
   const [query, setQuery] = useState({
-    place: "",
+    country: "",
     adults: 0,
     children: 0,
     infants: 0,
@@ -58,26 +59,22 @@ const SearchByPlace_Guest = () => {
     setQuery({ ...query });
   };
 
-  const handleSearchQuery = () => {
-    console.log(query.place, query.totalGuests);
-  };
+  // @TODO: Create a function that will take handleSearchQuery and pass the values in it and onces its done it will make the query null
 
   return (
     <div className="border  w-full  border-neutral-400 rounded-full">
-      <div className="flex   p-3">
-        {/* --- Place */}
+      <div className="flex flex-row   p-3">
+        {/* --- Country */}
         <div className="flex flex-col text-sm w-full  cursor-pointer">
           <span className="font-semibold">Where</span>
           <Input
             className="text-neutral-800 placeholder:text-neutral-500 border-none outline-none text-md focus:border-none focus:ring-0 "
-            onChange={(e) => setQuery({ ...query, place: e.target.value })}
-            placeholder="Search Destinations"
+            onChange={(e) => setQuery({ ...query, country: e.target.value })}
+            placeholder="Search By Country"
           />
         </div>
-        <Separator
-          orientation="vertical"
-          className="w-[1px] mr-2 bg-neutral-300"
-        />
+
+        <Separator  className="w-0 mr-3 border-l-2 border-neutral-400" />
 
         {/* ---Guests */}
         <div className="flex text-start flex-col w-full text-sm">
@@ -160,7 +157,12 @@ const SearchByPlace_Guest = () => {
         </div>
 
         <button
-          onClick={handleSearchQuery}
+          onClick={() =>
+            handleSearchQuery({
+              totalGuests: query.totalGuests || '',
+              country: query.country || '',
+            })
+          }
           className="bg-red-500 text-white hover:bg-[#DD1062]  w-[10rem] rounded-full flex items-center justify-center"
         >
           <CiSearch className="font-bold text-2xl" />
