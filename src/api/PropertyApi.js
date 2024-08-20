@@ -8,7 +8,8 @@ export const getProperties = async (query) => {
     // ---query for properties 
     if (query.country) {
       params.set("country", query.country);
-    }
+    }    
+
     if (query.totalGuests) {
       params.set("totalGuests", query.totalGuests);
     }

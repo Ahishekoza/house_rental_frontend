@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+Button; /* eslint-disable react-hooks/exhaustive-deps */
 import { FaAirbnb, FaUserCircle } from "react-icons/fa";
 
 import { IoIosMenu } from "react-icons/io";
@@ -10,21 +10,26 @@ import { Separator } from "./ui/separator";
 import { useEffect, useState } from "react";
 import FeatureCarousel from "./FeatureCarousel";
 import { getProperties } from "@/api/PropertyApi";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Button } from "./ui/button";
 
 const Header = () => {
-  const [activeTab, setActiveTab] = useState("Stays");
   const [features, setFeatures] = useState(null);
 
   // -- handle Search Based On Query
-  const handleSearchQuery = async(query) => {
-    await getProperties(query)
+  const handleSearchQuery = async (query) => {
+    await getProperties(query);
   };
 
   // -- handle Search Based On Features
-  const handleSearchQueryFeatures = async() => {
-    
-    await getProperties({features: features})
-  
+  const handleSearchQueryFeatures = async () => {
+    await getProperties({ features: features });
   };
 
   useEffect(() => {
@@ -32,7 +37,7 @@ const Header = () => {
   }, [features]);
 
   return (
-    <div className="border-b-2 border-neutral-300 sticky top-0 bg-white shadow-md">
+    <div className="border-b-2 border-neutral-300  bg-white shadow-md">
       <div className="flex flex-col ">
         {/* --Header and Search  */}
         <div className="flex flex-row items-start justify-between py-5  container ">
@@ -48,26 +53,8 @@ const Header = () => {
             >
               <div>
                 <TabsList className="flex  gap-10 bg-transparent text-neutral-600">
-                  <TabsTrigger
-                    value="Stays"
-                    onClick={() => setActiveTab("Stays")}
-                    className={
-                      activeTab === "Stays" ? "text-neutral-800 font-bold" : ""
-                    }
-                  >
-                    Stays
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="Experiences"
-                    onClick={() => setActiveTab("Experience")}
-                    className={
-                      activeTab === "Experience"
-                        ? "text-neutral-800 font-bold"
-                        : ""
-                    }
-                  >
-                    Experiences
-                  </TabsTrigger>
+                  <TabsTrigger value="Stays">Stays</TabsTrigger>
+                  <TabsTrigger value="Experiences">Experiences</TabsTrigger>
                 </TabsList>
               </div>
               <div>
@@ -90,14 +77,22 @@ const Header = () => {
                 </div>
               </PopoverTrigger>
               <PopoverContent>
-                <div className="bg-white p-3 flex flex-col gap-2 shadow-md rounded-md">
-                  <div className=" w-[200px]  flex flex-col gap-4 ">
-                    <Link to="/register" className="text-neutral-700">
-                      Sign up
-                    </Link>
-                    <Link to="/login" className="text-neutral-700">
-                      Login
-                    </Link>
+                <div className=" flex flex-col gap-2 ">
+                  <div className=" w-[200px] ">
+                    {/* --- SignIn / Login Dialog */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div className="flex flex-col gap-2">
+                          <span className="cursor-pointer">Log in</span>
+                          <span className="cursor-pointer">Sign up</span>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Log in or</DialogTitle>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                   <Separator className="border border-t-1 border-neutral-500" />
                   <Link to={"/property"}>Airbnb your home</Link>

@@ -7,7 +7,7 @@ const SiteLayout = ({children}) => {
     <div >
         <Header/>
         {/* <main>
-            lorem*2000
+           {children}
         </main>
         <Footer/> */}
     </div>

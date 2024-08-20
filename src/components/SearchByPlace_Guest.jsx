@@ -59,29 +59,47 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
     setQuery({ ...query });
   };
 
+  const handleSearch = () => {
+    handleSearchQuery({
+      totalGuests: query.totalGuests || "",
+      country: query.country || "",
+    });
+
+    setQuery({
+      country: "",
+      adults: 0,
+      children: 0,
+      infants: 0,
+      totalGuests: 0,
+    });
+  };
+
   // @TODO: Create a function that will take handleSearchQuery and pass the values in it and onces its done it will make the query null
 
   return (
-    <div className="border  w-full  border-neutral-400 rounded-full">
-      <div className="flex flex-row   p-3">
+    <div className="border w-full  border-neutral-400 rounded-2xl ">
+      <div className="flex flex-row p-3 h-full w-full">
         {/* --- Country */}
         <div className="flex flex-col text-sm w-full  cursor-pointer">
           <span className="font-semibold">Where</span>
           <Input
-            className="text-neutral-800 placeholder:text-neutral-500 border-none outline-none text-md focus:border-none focus:ring-0 "
+            value={query.country}
             onChange={(e) => setQuery({ ...query, country: e.target.value })}
             placeholder="Search By Country"
           />
         </div>
 
-        <Separator  className="w-0 mr-3 border-l-2 border-neutral-400" />
+        <Separator orientation="vertical" />
 
         {/* ---Guests */}
         <div className="flex text-start flex-col w-full text-sm">
           <span className="font-semibold">Who</span>
           <Popover onOpenChange={handlePopoverChange}>
             <PopoverTrigger asChild>
-              <Button className="text-left text-neutral-500">
+              <Button
+                variant="outline"
+                className="text-neutral-600 font-normal px-0"
+              >
                 {" "}
                 {query?.totalGuests > 0 ? query.totalGuests : "Guests"}{" "}
               </Button>
@@ -157,15 +175,10 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
         </div>
 
         <button
-          onClick={() =>
-            handleSearchQuery({
-              totalGuests: query.totalGuests || '',
-              country: query.country || '',
-            })
-          }
-          className="bg-red-500 text-white hover:bg-[#DD1062]  w-[10rem] rounded-full flex items-center justify-center"
+          onClick={handleSearch}
+          className="bg-red-500 text-white hover:bg-[#DD1062]  w-[8rem] rounded-full flex items-center justify-center"
         >
-          <CiSearch className="font-bold text-2xl" />
+          <CiSearch className="font-bold text-3xl" />
         </button>
       </div>
     </div>
