@@ -1,0 +1,1 @@
+Login_Signup_Dialog:-- handles the login of the user from email verification to setting the password in the database

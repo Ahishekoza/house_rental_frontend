@@ -1,4 +1,4 @@
-Button; /* eslint-disable react-hooks/exhaustive-deps */
+ /* eslint-disable react-hooks/exhaustive-deps */
 import { FaAirbnb, FaUserCircle } from "react-icons/fa";
 
 import { IoIosMenu } from "react-icons/io";
@@ -10,6 +10,11 @@ import { Separator } from "./ui/separator";
 import { useEffect, useState } from "react";
 import FeatureCarousel from "./FeatureCarousel";
 import { getProperties } from "@/api/PropertyApi";
+
+import { Button } from "./ui/button";
+import Login_Signup_Dialog from "./Login_Signup_Dialog";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser } from "@/slice/authSlice";
 import {
   Dialog,
   DialogContent,
@@ -17,10 +22,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
+import { TbAdjustmentsHorizontal } from "react-icons/tb";
 
 const Header = () => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+
   const [features, setFeatures] = useState(null);
+  const [filters , setFilters] = useState({
+    place_type:'Any Type',
+  });
 
   // -- handle Search Based On Query
   const handleSearchQuery = async (query) => {
@@ -80,22 +91,48 @@ const Header = () => {
                 <div className=" flex flex-col gap-2 ">
                   <div className=" w-[200px] ">
                     {/* --- SignIn / Login Dialog */}
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <div className="flex flex-col gap-2">
-                          <span className="cursor-pointer">Log in</span>
-                          <span className="cursor-pointer">Sign up</span>
+                    {user ? (
+                      <>
+                        <div className="flex flex-col gap-3">
+                          <Link
+                            to={"/notifications"}
+                            className="hover:border-l-4 hover:transition-all hover:border-red-300 "
+                          >
+                            Notifications
+                          </Link>
+                          <Link
+                            to={"/messages"}
+                            className="hover:border-l-4 hover:transition-all hover:border-red-300 "
+                          >
+                            Messages
+                          </Link>
+                          <Link
+                            to={"/aacount"}
+                            className="hover:border-l-4 hover:transition-all hover:border-red-300 "
+                          >
+                            Account
+                          </Link>
                         </div>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Log in or</DialogTitle>
-                        </DialogHeader>
-                      </DialogContent>
-                    </Dialog>
+                      </>
+                    ) : (
+                      <Login_Signup_Dialog />
+                    )}
                   </div>
                   <Separator className="border border-t-1 border-neutral-500" />
-                  <Link to={"/property"}>Airbnb your home</Link>
+                  <Link
+                    to={"/property"}
+                    className="hover:border-l-4 hover:transition-all cursor-pointer hover:border-red-300 "
+                  >
+                    Airbnb your home
+                  </Link>
+                  {user && (
+                    <span
+                      className="hover:border-l-4 hover:transition-all cursor-pointer hover:border-red-300 "
+                      onClick={() => dispatch(clearUser())}
+                    >
+                      Logout
+                    </span>
+                  )}
                 </div>
               </PopoverContent>
             </Popover>
@@ -105,8 +142,39 @@ const Header = () => {
         <Separator className="border border-t-0 border-neutral-400" />
 
         {/* Features */}
-        <div className="container my-5">
-          <FeatureCarousel setFeatures={setFeatures} />
+        <div className="container my-5 flex items-center gap-20">
+          <FeatureCarousel setFeatures={setFeatures} feature_selected={features} />
+          {features && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="border-2 bg-transparent hover:transition-all hover:border-neutral-800 hover:bg-neutral-200 text-neutral-800 border-neutral-400 ">
+                  <TbAdjustmentsHorizontal />
+                  Filters
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="text-center mb-2">
+                    Filters
+                  </DialogTitle>
+                  <Separator className="border-1 mb-2 border-neutral-500"/>
+                </DialogHeader>
+                {/* @TODO:-- wrap the Dialog content in the scrollable Area  */}
+                <div className="p-5 flex flex-col gap-3">
+                  <div className="flex flex-col items-start">
+                    <span className="filter_text mb-5">Type of place</span>
+                    <div className="w-full h-16 rounded-xl border-2 flex items-center justify-evenly border-neutral-400 p-1">
+                      <span className="place_option">Any type</span>
+                      <Separator orientation="vertical" className="border-1 border-neutral-600" />
+                      <span className="place_option">Room</span>
+                      <Separator orientation="vertical" className="border-1 border-neutral-600" />
+                      <span className="place_option ">Entire Home</span>
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </div>
     </div>

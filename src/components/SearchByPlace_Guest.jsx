@@ -77,10 +77,10 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
   // @TODO: Create a function that will take handleSearchQuery and pass the values in it and onces its done it will make the query null
 
   return (
-    <div className="border w-full  border-neutral-400 rounded-2xl ">
+    <div className="border w-full  border-neutral-400 rounded-full ">
       <div className="flex flex-row p-3 h-full w-full">
         {/* --- Country */}
-        <div className="flex flex-col text-sm w-full  cursor-pointer">
+        <div className="flex flex-col text-sm w-full ml-2 cursor-pointer">
           <span className="font-semibold">Where</span>
           <Input
             value={query.country}
@@ -98,7 +98,7 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="text-neutral-600 font-normal px-0"
+                className="text-neutral-600 hover:bg-transparent justify-start font-normal px-0"
               >
                 {" "}
                 {query?.totalGuests > 0 ? query.totalGuests : "Guests"}{" "}
@@ -115,15 +115,15 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
                   </div>
                   <div className="flex gap-2 ">
                     <button
-                      onClick={() => handleGuestsCount("adults", "increment")}
-                    >
-                      <CiCirclePlus className="text-3xl" />
-                    </button>
-                    <span className="text-xl">{query.adults}</span>
-                    <button
                       onClick={() => handleGuestsCount("adults", "decrement")}
                     >
                       <CiCircleMinus className="text-3xl" />
+                    </button>
+                    <span className="text-xl">{query.adults}</span>
+                    <button
+                      onClick={() => handleGuestsCount("adults", "increment")}
+                    >
+                      <CiCirclePlus className="text-3xl" />
                     </button>
                   </div>
                 </div>
@@ -136,15 +136,15 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
                   </div>
                   <div className="flex gap-2 ">
                     <button
-                      onClick={() => handleGuestsCount("children", "increment")}
-                    >
-                      <CiCirclePlus className="text-3xl" />
-                    </button>
-                    <span className="text-xl">{query.children}</span>
-                    <button
                       onClick={() => handleGuestsCount("children", "decrement")}
                     >
                       <CiCircleMinus className="text-3xl" />
+                    </button>
+                    <span className="text-xl">{query.children}</span>
+                    <button
+                      onClick={() => handleGuestsCount("children", "increment")}
+                    >
+                      <CiCirclePlus className="text-3xl" />
                     </button>
                   </div>
                 </div>
@@ -157,15 +157,15 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
                   </div>
                   <div className="flex gap-2 ">
                     <button
-                      onClick={() => handleGuestsCount("infants", "increment")}
-                    >
-                      <CiCirclePlus className="text-3xl" />
-                    </button>
-                    <span className="text-xl">{query.infants}</span>
-                    <button
                       onClick={() => handleGuestsCount("infants", "decrement")}
                     >
                       <CiCircleMinus className="text-3xl" />
+                    </button>
+                    <span className="text-xl">{query.infants}</span>
+                    <button
+                      onClick={() => handleGuestsCount("infants", "increment")}
+                    >
+                      <CiCirclePlus className="text-3xl" />
                     </button>
                   </div>
                 </div>
@@ -176,7 +176,7 @@ const SearchByPlace_Guest = ({ handleSearchQuery }) => {
 
         <button
           onClick={handleSearch}
-          className="bg-red-500 text-white hover:bg-[#DD1062]  w-[8rem] rounded-full flex items-center justify-center"
+          className="bg-red-500  text-white hover:bg-[#DD1062]  w-[10rem] rounded-full flex items-center justify-center"
         >
           <CiSearch className="font-bold text-3xl" />
         </button>

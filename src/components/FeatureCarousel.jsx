@@ -12,6 +12,7 @@ import TopCitiesIcon from "../assets/FeaturesIcon/skyscrapper.png";
 import RoomsIcon from "../assets/FeaturesIcon/hotel.png";
 import TreeHouseIcon from "../assets/FeaturesIcon/treehouse.png";
 import CountrySideIcon from "../assets/FeaturesIcon/barn.png";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 
 const features = [
   {
@@ -68,26 +69,33 @@ const features = [
   },
 ];
 
-const FeatureCarousel = ({ setFeatures }) => {
+const FeatureCarousel = ({ setFeatures ,feature_selected }) => {
   return (
-    <div className="w-full flex items-center justify-evenly">
-      {features.map((feature, index) => (
-        <div
-          onClick={() =>
-            setFeatures(feature?.title)
-          }
-          key={index}
-          className="p-1 mx-2 flex flex-col items-center cursor-pointer"
-        >
-          <div className=" p-1 h-[3rem] w-[3rem]">
-            <img className="h-full w-full object-cover " src={feature?.icon} />
-          </div>
-          <span className="text-xs font-bold text-neutral-600">
-            {feature?.title}
-          </span>
-        </div>
-      ))}
-    </div>
+    <Carousel opts={{ align: "start" }} className={feature_selected?"w-[80%]":"w-full"}>
+      <CarouselContent>
+        {features.map((feature, index) => (
+          <CarouselItem key={index} className="md:basis-1/12 sm:basis-1/4">
+            <div
+              onClick={() => setFeatures(feature?.title)}
+              key={index}
+              className="p-1 mx-2 flex flex-col items-center cursor-pointer"
+            >
+              <div className=" p-1 h-[3rem] w-[3rem]">
+                <img
+                  className="h-full w-full object-cover "
+                  src={feature?.icon}
+                />
+              </div>
+              <span className="text-xs font-bold text-neutral-600">
+                {feature?.title}
+              </span>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
   );
 };
 
