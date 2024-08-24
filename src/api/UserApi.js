@@ -41,3 +41,12 @@ export const loginUser = async(email,password)=>{
     }
 }
 
+
+export const deleteUser = async(email)=>{
+    try {
+        const response = await axios.post(`${API_BASE_URL}/user/delete`,{email:email})
+        return response.data
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}

@@ -8,5 +8,9 @@
 }
 
 .place_option{
-    @apply hover:bg-neutral-200 hover:border-2 h-full cursor-pointer hover:border-neutral-600 hover:transition-all flex items-center justify-center  w-2/6  rounded-md
+    @apply hover:bg-neutral-100  h-full cursor-pointer transition-all flex items-center justify-center  w-2/6  rounded-md
+}
+
+.place_option_selected{
+    @apply border-2 border-neutral-600 
 }

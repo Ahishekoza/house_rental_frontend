@@ -3,31 +3,36 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const getProperties = async (query) => {
-    const params = new URLSearchParams();
-    
-    // ---query for properties 
-    if (query.country) {
-      params.set("country", query.country);
-    }    
+  const params = new URLSearchParams();
 
-    if (query.totalGuests) {
-      params.set("totalGuests", query.totalGuests);
-    }
+  // ---query for properties
+  if (query.country) {
+    params.set("country", query.country);
+  }
 
-    // ---query for features
-   if(query.features){
+  if (query.totalGuests) {
+    params.set("totalGuests", query.totalGuests);
+  }
+
+  // ---query for features
+  if (query.features) {
     params.set("features", query.features);
-   }
+  }
 
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/properties?${params.toString()}`
-      );
-      console.log(response);
-    } catch (error) {
-      console.log("Error Fetching properties", error);
-      throw new Error(error.message);
-    }
-  };
-  
+  //  ---query for filters/---propertyType
+  if (query.propertyType) {
+    params.set("propertyType", query.propertyType);
+  }
 
+  console.log(query);
+
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/properties?${params.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Error Fetching properties", error);
+    throw new Error(error.message);
+  }
+};

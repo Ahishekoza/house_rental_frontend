@@ -1,7 +1,5 @@
 // @TODO:solve the existing user use case
 
-
-
 import {
   Dialog,
   DialogContent,
@@ -12,7 +10,13 @@ import {
 import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import { loginUser, setPassworrd, verifyEmail, verifyOTP } from "@/api/UserApi";
+import {
+  deleteUser,
+  loginUser,
+  setPassworrd,
+  verifyEmail,
+  verifyOTP,
+} from "@/api/UserApi";
 import { useState } from "react";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { MdOutlineMail } from "react-icons/md";
@@ -38,19 +42,42 @@ const Login_Signup_Dialog = () => {
     verified: false,
     password: "",
     user_present: false,
+    user_present_password_verification: false,
   });
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const dialogTitle = userInfo.verified
-    ? "Set your password"
+  const dialogTitle = userInfo.verified ||  (userInfo.user_present && userInfo.user_present_password_verification )
+    ? "Entire your password"
     : userInfo.otp_send
     ? "Confirm your email"
     : userInfo.user_present
     ? "Email address is already registered"
     : "Log in or Sign up";
 
+  // ---Dialog Close
+  const handleDialogOpen = async (isOpen) => {
+    setIsOpen(isOpen); // Set open state first
+  
+    if (!isOpen && userInfo?.email !== "") {
+      const { success } = await deleteUser(userInfo.email);
+      if (success) {
+        setUserInfo({
+          email: "",
+          otp_send: false,
+          otp: "",
+          verified: false,
+          password: "",
+          user_present: false,
+          user_present_password_verification: false,
+        });
+      }
+    }
+  };
+  
+
+  // --- Initial step for the Registration
   const handleOTP = async () => {
     setIsLoading(true);
     try {
@@ -63,7 +90,6 @@ const Login_Signup_Dialog = () => {
           ...userInfo,
           user_present: true,
           email: response.existingUser.email,
-          password: response.existingUser.password,
         });
       }
     } finally {
@@ -71,6 +97,7 @@ const Login_Signup_Dialog = () => {
     }
   };
 
+  // --- Next Step for the Email verification via OTP
   const handleVerifyOTP = async () => {
     setIsLoading(true);
     try {
@@ -83,6 +110,7 @@ const Login_Signup_Dialog = () => {
     }
   };
 
+  // --- verifying the user and setting the password
   const handleRegisterUser = async () => {
     setIsLoading(true);
     try {
@@ -101,23 +129,35 @@ const Login_Signup_Dialog = () => {
     }
   };
 
+  // --- login function for existing user
   const handleUserLogin = async () => {
     setIsLoading(true);
     try {
-     const {loggedInUser} =  await loginUser(userInfo.email,"")
+      setUserInfo({ ...userInfo, user_present_password_verification: true });
+    } finally {
+      setIsLoading(false);
+    }
+
+  };
+
+  const handleUserPasswordVerification  = async() => {
+     try {
+      console.log(userInfo);
+      const { loggedInUser } = await loginUser(userInfo.email, userInfo.password);
       dispatch(setUser(loggedInUser));
       setUserInfo({});
       setIsOpen(false);
     } finally {
       setIsLoading(false);
     }
-  };
+  }
+
 
   const renderButtonContent = () => {
     const content =
       userInfo.otp_send && !userInfo.verified
         ? "Verify"
-        : userInfo.verified
+        : userInfo.verified || (userInfo.user_present && userInfo.user_present_password_verification )
         ? "Confirm"
         : "Continue";
 
@@ -126,8 +166,10 @@ const Login_Signup_Dialog = () => {
         ? handleVerifyOTP
         : userInfo.verified
         ? handleRegisterUser
-        : userInfo.user_present
+        : userInfo.user_present && !userInfo.user_present_password_verification
         ? handleUserLogin
+        : userInfo.user_present && userInfo.user_present_password_verification
+        ? handleUserPasswordVerification
         : handleOTP;
 
     return (
@@ -140,13 +182,19 @@ const Login_Signup_Dialog = () => {
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog open={isOpen} onOpenChange={handleDialogOpen}>
         <DialogTrigger asChild>
           <div className="flex flex-col gap-2">
-            <span className="hover:border-l-4 hover:transition-all cursor-pointer hover:border-red-300 " onClick={() => setIsOpen(true)}>
+            <span
+              className="hover:border-l-4 hover:transition-all cursor-pointer hover:border-red-300 "
+              onClick={() => setIsOpen(true)}
+            >
               Log in
             </span>
-            <span className="hover:border-l-4 hover:transition-all cursor-pointer hover:border-red-300 " onClick={() => setIsOpen(true)}>
+            <span
+              className="hover:border-l-4 hover:transition-all cursor-pointer hover:border-red-300 "
+              onClick={() => setIsOpen(true)}
+            >
               Sign up
             </span>
           </div>
@@ -158,7 +206,7 @@ const Login_Signup_Dialog = () => {
           <Separator />
           <div className="px-5 py-1 flex flex-col items-start">
             {/* // This condition shows that user with similar email id is already registered so do you want to move with the same account or do you want to login with new account */}
-            {userInfo.user_present ? (
+            {userInfo.user_present && !userInfo.user_present_password_verification ? (
               <>
                 <div className="flex flex-col">
                   <span className="mb-3">
@@ -200,7 +248,7 @@ const Login_Signup_Dialog = () => {
                   </InputOTP>
                 </div>
               </>
-            ) : userInfo.verified ? (
+            ) : userInfo.verified || (userInfo.user_present && userInfo.user_present_password_verification ) ? (
               <>
                 <div className="w-full mb-4 relative">
                   <Input

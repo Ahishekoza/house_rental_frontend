@@ -1,4 +1,5 @@
- /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FaAirbnb, FaUserCircle } from "react-icons/fa";
 
 import { IoIosMenu } from "react-icons/io";
@@ -10,27 +11,19 @@ import { Separator } from "./ui/separator";
 import { useEffect, useState } from "react";
 import FeatureCarousel from "./FeatureCarousel";
 import { getProperties } from "@/api/PropertyApi";
-
-import { Button } from "./ui/button";
 import Login_Signup_Dialog from "./Login_Signup_Dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "@/slice/authSlice";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-import { TbAdjustmentsHorizontal } from "react-icons/tb";
+
+import Filter from "./Filter";
 
 const Header = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   const [features, setFeatures] = useState(null);
-  const [filters , setFilters] = useState({
-    place_type:'Any Type',
+  const [filters, setFilters] = useState({
+    place_type: "",
   });
 
   // -- handle Search Based On Query
@@ -40,15 +33,24 @@ const Header = () => {
 
   // -- handle Search Based On Features
   const handleSearchQueryFeatures = async () => {
-    await getProperties({ features: features });
+    await getProperties({ features: features  });
   };
 
   useEffect(() => {
     handleSearchQueryFeatures();
   }, [features]);
 
+  const handleSearchQueryFilter = async () => {
+   const {data,pagination} =  await getProperties({propertyType:filters?.place_type, features:features});
+   console.log(data.length);
+  }
+
+  useEffect(() => {
+    handleSearchQueryFilter();
+  },[filters]);
+
   return (
-    <div className="border-b-2 border-neutral-300  bg-white shadow-md">
+    <div className="border-b-2 border-neutral-300  bg-white shadow-md ">
       <div className="flex flex-col ">
         {/* --Header and Search  */}
         <div className="flex flex-row items-start justify-between py-5  container ">
@@ -142,38 +144,13 @@ const Header = () => {
         <Separator className="border border-t-0 border-neutral-400" />
 
         {/* Features */}
-        <div className="container my-5 flex items-center gap-20">
-          <FeatureCarousel setFeatures={setFeatures} feature_selected={features} />
+        <div className="container  flex items-center gap-20">
+          <FeatureCarousel
+            setFeatures={setFeatures}
+            feature_selected={features}
+          />
           {features && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="border-2 bg-transparent hover:transition-all hover:border-neutral-800 hover:bg-neutral-200 text-neutral-800 border-neutral-400 ">
-                  <TbAdjustmentsHorizontal />
-                  Filters
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="text-center mb-2">
-                    Filters
-                  </DialogTitle>
-                  <Separator className="border-1 mb-2 border-neutral-500"/>
-                </DialogHeader>
-                {/* @TODO:-- wrap the Dialog content in the scrollable Area  */}
-                <div className="p-5 flex flex-col gap-3">
-                  <div className="flex flex-col items-start">
-                    <span className="filter_text mb-5">Type of place</span>
-                    <div className="w-full h-16 rounded-xl border-2 flex items-center justify-evenly border-neutral-400 p-1">
-                      <span className="place_option">Any type</span>
-                      <Separator orientation="vertical" className="border-1 border-neutral-600" />
-                      <span className="place_option">Room</span>
-                      <Separator orientation="vertical" className="border-1 border-neutral-600" />
-                      <span className="place_option ">Entire Home</span>
-                    </div>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
+           <Filter filters={filters} setFilters={setFilters}/>
           )}
         </div>
       </div>

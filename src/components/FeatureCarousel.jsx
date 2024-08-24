@@ -74,21 +74,22 @@ const FeatureCarousel = ({ setFeatures ,feature_selected }) => {
     <Carousel opts={{ align: "start" }} className={feature_selected?"w-[80%]":"w-full"}>
       <CarouselContent>
         {features.map((feature, index) => (
-          <CarouselItem key={index} className="md:basis-1/12 sm:basis-1/4">
+          <CarouselItem key={index} className="md:basis-1/12 sm:basis-1/4 relative">
             <div
               onClick={() => setFeatures(feature?.title)}
               key={index}
-              className="p-1 mx-2 flex flex-col items-center cursor-pointer"
+              className={"p-1 mx-2 flex flex-col items-center cursor-pointer"}
             >
-              <div className=" p-1 h-[3rem] w-[3rem]">
+              <div className={" p-1 h-[3rem] w-[3rem]"}>
                 <img
                   className="h-full w-full object-cover "
                   src={feature?.icon}
                 />
               </div>
-              <span className="text-xs font-bold text-neutral-600">
+              <span className="text-xs text-center font-bold text-neutral-600">
                 {feature?.title}
               </span>
+              {feature_selected===feature?.title && <span className=" absolute bottom-0 border-2 border-neutral-950 w-full"></span>}
             </div>
           </CarouselItem>
         ))}

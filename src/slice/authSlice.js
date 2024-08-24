@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 // @TODO :- token logic to be peformed in the later version of the WEB
 const initialState = {
-    user:null
+    user: null 
 }
 
 const authSlice = createSlice({
@@ -10,7 +10,6 @@ const authSlice = createSlice({
     initialState:initialState,
     reducers:{
         setUser(state,action){
-            console.log(action.payload);
             state.user = action.payload
             localStorage.setItem('user',JSON.stringify(state.user))
         },
