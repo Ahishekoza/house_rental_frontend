@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 // @TODO :- token logic to be peformed in the later version of the WEB
 const initialState = {
-    user: null 
+    user: JSON.parse(localStorage.getItem('user')) ||  null 
 }
 
 const authSlice = createSlice({

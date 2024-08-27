@@ -24,12 +24,12 @@ export const getProperties = async (query) => {
     params.set("propertyType", query.propertyType);
   }
 
-  console.log(query);
 
   try {
     const response = await axios.get(
       `${API_BASE_URL}/properties?${params.toString()}`
     );
+    console.log(response.data.data);
     return response.data;
   } catch (error) {
     console.log("Error Fetching properties", error);
