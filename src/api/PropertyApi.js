@@ -6,21 +6,21 @@ export const getProperties = async (query) => {
   const params = new URLSearchParams();
 
   // ---query for properties
-  if (query.country) {
+  if (query?.country) {
     params.set("country", query.country);
   }
 
-  if (query.totalGuests) {
+  if (query?.totalGuests) {
     params.set("totalGuests", query.totalGuests);
   }
 
   // ---query for features
-  if (query.features) {
+  if (query?.features) {
     params.set("features", query.features);
   }
 
   //  ---query for filters/---propertyType
-  if (query.propertyType) {
+  if (query?.propertyType) {
     params.set("propertyType", query.propertyType);
   }
 
@@ -29,7 +29,6 @@ export const getProperties = async (query) => {
     const response = await axios.get(
       `${API_BASE_URL}/properties?${params.toString()}`
     );
-    console.log(response.data.data);
     return response.data;
   } catch (error) {
     console.log("Error Fetching properties", error);

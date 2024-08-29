@@ -1,4 +1,3 @@
-// @TODO:solve the existing user use case
 
 import {
   Dialog,
@@ -142,7 +141,6 @@ const Login_Signup_Dialog = () => {
 
   const handleUserPasswordVerification  = async() => {
      try {
-      console.log(userInfo);
       const { loggedInUser } = await loginUser(userInfo.email, userInfo.password);
       dispatch(setUser(loggedInUser));
       setUserInfo({});

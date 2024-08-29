@@ -14,7 +14,7 @@ import Login_Signup_Dialog from "./Login_Signup_Dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "@/slice/authSlice";
 import Filter from "./Filter";
-import { setQuery } from "@/slice/querySlice";
+import { setQuery, setQuery_data } from "@/slice/querySlice";
 
 const Header = () => {
   const user = useSelector((state) => state.auth.user);
@@ -54,9 +54,14 @@ const Header = () => {
   // This useEffect will run whenever `query` changes, including after features are updated
   useEffect(() => {
     // Perform the actual property search here
-    if (query) {
-      getProperties(query);
+    const queryResult = async()=>{
+     if(query){
+      const {data} = await getProperties(query)
+      dispatch(setQuery_data(data))  
+     }
     }
+
+    queryResult()
   }, [query]);
 
   return (

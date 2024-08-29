@@ -14,8 +14,16 @@ const querySlice = createSlice({
       state.query = {...state.query,...action.payload};
       localStorage.setItem("query", JSON.stringify(state.query));
     },
+    setQuery_data(state, action) {
+      console.log([...action.payload]);
+      state.query_data = [...action.payload];
+    },
+    clearQuery(state){
+      state.query = {},
+      localStorage.removeItem("query")
+    }
   },
 });
 
-export const { setQuery } = querySlice.actions;
+export const { setQuery,setQuery_data,clearQuery } = querySlice.actions;
 export default querySlice.reducer;
