@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { verifyToken } from "./api/UserApi";
 import { clearUser } from "./slice/authSlice";
 import { clearQuery } from "./slice/querySlice";
+import SinglePropertyPage from "./pages/SinglePropertyPage";
 
 const App = () => {
   const user = useSelector((state) => state.auth.user);
@@ -28,6 +29,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" exact element={<HomePage />} />
+      <Route path="/:propertyId" exact element={<SinglePropertyPage/>}/>
     </Routes>
   );
 };

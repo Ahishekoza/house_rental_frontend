@@ -35,3 +35,13 @@ export const getProperties = async (query) => {
     throw new Error(error.message);
   }
 };
+
+export const getSingleProperty = async(propertyId)=>{
+  try {
+   const {data} =  await axios.get(`${API_BASE_URL}/properties/${propertyId}`)
+   return data
+  } catch (error) {
+    console.log("Error Fetching single property", error);
+    throw new Error(error.message);
+  }
+}

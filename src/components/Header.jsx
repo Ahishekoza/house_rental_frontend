@@ -5,7 +5,7 @@ import { IoIosMenu } from "react-icons/io";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SearchByPlace_Guest from "./SearchByPlace_Guest";
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Separator } from "./ui/separator";
 import { useEffect, useState } from "react";
 import FeatureCarousel from "./FeatureCarousel";
@@ -14,13 +14,14 @@ import Login_Signup_Dialog from "./Login_Signup_Dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "@/slice/authSlice";
 import Filter from "./Filter";
-import { setQuery, setQuery_data } from "@/slice/querySlice";
+import { clearQuery, setQuery, setQuery_data } from "@/slice/querySlice";
 
 const Header = () => {
   const user = useSelector((state) => state.auth.user);
   const { query } = useSelector((state) => state.filter_queries);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const [features, setFeatures] = useState(query?.features);
   const [filters, setFilters] = useState({
@@ -63,6 +64,13 @@ const Header = () => {
 
     queryResult()
   }, [query]);
+
+
+  const handleLogout = async()=>{
+    dispatch(clearUser())
+    dispatch(clearQuery())
+    navigate('/')
+  }
 
   return (
     <div className="border-b-2 border-neutral-300 bg-white shadow-md">
@@ -144,7 +152,7 @@ const Header = () => {
                   {user && (
                     <span
                       className="hover:border-l-4 hover:transition-all cursor-pointer hover:border-red-300"
-                      onClick={() => dispatch(clearUser())}
+                      onClick={handleLogout}
                     >
                       Logout
                     </span>

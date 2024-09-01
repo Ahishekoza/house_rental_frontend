@@ -14,3 +14,11 @@
 .place_option_selected{
     @apply border-2 border-neutral-600 
 }
+
+.image_container{
+    @apply relative  cursor-pointer
+}
+
+.image_hover_bg{
+    @apply absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-300 rounded-l-lg
+}

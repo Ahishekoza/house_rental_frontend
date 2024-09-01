@@ -31,6 +31,7 @@ export const verifyToken = async (token) => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+
     return response.data
   } catch (error) {
     throw new Error(error.message);

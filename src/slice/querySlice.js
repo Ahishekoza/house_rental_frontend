@@ -15,7 +15,6 @@ const querySlice = createSlice({
       localStorage.setItem("query", JSON.stringify(state.query));
     },
     setQuery_data(state, action) {
-      console.log([...action.payload]);
       state.query_data = [...action.payload];
     },
     clearQuery(state){
