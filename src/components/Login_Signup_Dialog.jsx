@@ -312,7 +312,7 @@ const Login_Signup_Dialog = () => {
             )}
             <Button
               asChild
-              className="w-full bg-red-500  text-white hover:bg-[#DD1062]  "
+              className="w-full bg-red-500 cursor-pointer  text-white hover:bg-[#DD1062]  "
             >
               {renderButtonContent()}
             </Button>

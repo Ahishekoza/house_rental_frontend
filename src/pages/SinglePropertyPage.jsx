@@ -4,46 +4,38 @@ import { getSingleProperty } from "@/api/PropertyApi";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BsGrid3X3GapFill } from "react-icons/bs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { format, addDays } from "date-fns";
 
-import { cn } from "../lib/utils";
-import { Button } from "../components/ui/button";
-import { Calendar } from "../components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { useSelector } from "react-redux";
 import SiteLayout from "@/Layout/SiteLayout";
+import { formaDatesAndGetDaysDifference } from "../../utils/date_format_days_difference.js";
+import CheckOutCard from "@/components/CheckOutCard.jsx";
 
 const SinglePropertyPage = () => {
   const user = useSelector((state) => state.auth.user);
 
   const { propertyId } = useParams();
-  const [property_data, setPropertyData] = useState({
+  const [propertyData, setPropertyData] = useState({
     isloading: false,
+    tenant: user?._id,
   });
   const [date, setDate] = useState({
     from: null,
     to: null,
   });
 
-  const checkout_login_button = user?.email
+  const [stayForNoDays, setStayForNoDays] = useState(null);
+
+  const checkoutLoginButton = user?.email
     ? "Reserve"
     : "Login to reserve the property";
 
-
-  const handleReserve = ()=>{
-    const date_formate = new Date(date?.from);
-   const isoDate = format(date_formate, "yyyy-MM-dd");
-   console.log(isoDate);
-  }
+  const handleReserve = () => {
+    // -- property_Id , tenant , startDate , endDate
+  };
 
   useEffect(() => {
     const fetchSingleProperty = async () => {
-      setPropertyData({ ...property_data, isloading: true });
+      setPropertyData({ ...propertyData, isloading: true });
       const data = await getSingleProperty(propertyId);
       setPropertyData({ ...data, isloading: false });
     };
@@ -51,23 +43,30 @@ const SinglePropertyPage = () => {
     fetchSingleProperty();
   }, [propertyId]);
 
+  useEffect(() => {
+    if (date?.from && date.to) {
+      const days = formaDatesAndGetDaysDifference(date?.from, date?.to);
+      setStayForNoDays(days);
+    }
+  }, [date]);
+
   return (
     // @TODO:- Manage a state for Header because header for home page is different and for others its different
     // @TODO:- Remove the className for the div because it is already present in SiteLayout once you finish with Header state management
     <SiteLayout>
-      {property_data?.isloading ? (
+      {propertyData?.isloading ? (
         <div>Loading....</div>
       ) : (
         <div>
           <span className="text-3xl font-bold text-neutral-800">
-            {property_data?.title}
+            {propertyData?.title}
           </span>
           {/* ---Photos Screen */}
           <div className="grid grid-cols-2 space-x-2 mt-5 relative">
-            {property_data?.images?.length > 0 && (
+            {propertyData?.images?.length > 0 && (
               <div className="image_container">
                 <img
-                  src={property_data?.images[0]?.url}
+                  src={propertyData?.images[0]?.url}
                   className="w-full h-full object-cover rounded-l-lg"
                 />
                 <div className="image_hover_bg"></div>
@@ -75,7 +74,7 @@ const SinglePropertyPage = () => {
             )}
 
             <div className="grid grid-cols-2 gap-2">
-              {property_data?.images?.slice(1).map((image, index) => (
+              {propertyData?.images?.slice(1).map((image, index) => (
                 <div key={index} className="image_container">
                   <img
                     src={image?.url}
@@ -103,14 +102,14 @@ const SinglePropertyPage = () => {
               {/* Content here */}
               <div className="flex flex-col items-start text-neutral-800">
                 <span className="text-3xl font-semibold">
-                  {property_data?.title}
+                  {propertyData?.title}
                 </span>
                 <span className="text-xl">
-                  {property_data?.totalGuests} guests .{" "}
-                  {property_data?.rooms_beds?.rooms} bedrooms .{" "}
-                  {property_data?.rooms_beds?.beds} beds .{" "}
-                  {property_data?.rooms_beds?.bathrooms}{" "}
-                  {property_data?.rooms_beds?.bathrooms > 1
+                  {propertyData?.totalGuests} guests .{" "}
+                  {propertyData?.rooms_beds?.rooms} bedrooms .{" "}
+                  {propertyData?.rooms_beds?.beds} beds .{" "}
+                  {propertyData?.rooms_beds?.bathrooms}{" "}
+                  {propertyData?.rooms_beds?.bathrooms > 1
                     ? "bathrooms"
                     : "bathroom"}
                 </span>
@@ -119,88 +118,16 @@ const SinglePropertyPage = () => {
             </div>
 
             {/* ---RIGHT SIDE CHECKOUT BUTTON */}
-            {/* @TODO:- create a separate component for checkout card */}
-            <div className="relative">
-              <div className="sticky top-4 flex justify-center items-center">
-                <Card className="w-[400px]">
-                  <CardHeader>
-                    <CardTitle>
-                      ${property_data?.price}
-                      <span className="text-neutral-400 mx-2">night</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className=" flex flex-col gap-5">
-                      <div className="flex border  border-1 border-neutral-600 rounded-md p-2">
-                        <div className={"grid gap-2 w-full"}>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                id="date"
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full   text-left font-normal",
-                                  !date && "text-muted-foreground"
-                                )}
-                              >
-                                {date?.from ? (
-                                  date.to ? (
-                                    <>
-                                      <div className="flex  w-full items-start justify-between">
-                                        <div className="flex flex-col ">
-                                          <span>CheckIn</span>
-                                          <span>
-                                            {format(date.from, "LLL dd, y")}
-                                          </span>
-                                        </div>
-                                        <div className="flex flex-col">
-                                          <span>CheckOut</span>
-                                          <span>
-                                            {format(date.to, "LLL dd, y")}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </>
-                                  ) : (
-                                    format(date.from, "LLL dd, y")
-                                  )
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0"
-                              align="start"
-                            >
-                              <Calendar
-                                initialFocus
-                                mode="range"
-                                defaultMonth={date?.from}
-                                selected={date}
-                                onSelect={(newDate) => {
-                                  setDate(newDate);
-                                }}
-                                numberOfMonths={2}
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      </div>
-                      {date?.from && date?.to && (
-                        <Button
-                          disabled={user?.email ? false : true}
-                          onClick={handleReserve}
-                          className="w-full bg-red-500  text-white hover:bg-[#DD1062] "
-                        >
-                          {checkout_login_button}
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+            {/* @TODO:- create a separate component for checkout card and send propertyData , staysForNoDays  , date , setDate , checkoutLoginButton */}
+            <CheckOutCard
+              date={date}
+              setDate={setDate}
+              user={user}
+              propertyData={propertyData}
+              stayForNoDays={stayForNoDays}
+              checkoutLoginButton={checkoutLoginButton}
+              handleReserve={handleReserve}
+            />
           </div>
         </div>
       )}

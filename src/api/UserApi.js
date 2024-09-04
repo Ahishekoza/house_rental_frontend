@@ -27,12 +27,12 @@ export const verifyOTP = async (email, otp) => {
 
 export const verifyToken = async (token) => {
   try {
-   const response =  await axios.get(`${API_BASE_URL}/verify-token`, {
+    const response = await axios.get(`${API_BASE_URL}/verify-token`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-
-    return response.data
+    console.log("verify token frontend response" + JSON.stringify(response.data));
+    return response.data;
   } catch (error) {
     throw new Error(error.message);
   }
