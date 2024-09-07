@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import SiteLayout from "@/Layout/SiteLayout";
 import { formaDatesAndGetDaysDifference } from "../../utils/date_format_days_difference.js";
 import CheckOutCard from "@/components/CheckOutCard.jsx";
+import { checkAvailability } from "@/api/RentalApi.js";
 
 const SinglePropertyPage = () => {
   const user = useSelector((state) => state.auth.user);
@@ -24,13 +25,39 @@ const SinglePropertyPage = () => {
   });
 
   const [stayForNoDays, setStayForNoDays] = useState(null);
+  const [datesAvailabilityCheck,setDatesAvailabilityCheck] = useState(false)
 
   const checkoutLoginButton = user?.email
     ? "Reserve"
     : "Login to reserve the property";
 
-  const handleReserve = () => {
+  const handleReserve = async () => {
+    setDatesAvailabilityCheck(true)
     // -- property_Id , tenant , startDate , endDate
+    try{
+      const { iso_from_Date, iso_to_Date } = formaDatesAndGetDaysDifference(
+        date?.from,
+        date?.to,
+        true
+      );
+  
+      const { success } = await checkAvailability(
+        propertyId,
+        iso_from_Date,
+        iso_to_Date
+      );
+  
+      if (!success) {
+        // @TODO :-- Add a toast to show the available dates for the property
+        
+      }
+
+      // ----@TODO:-- Let make this page a stripe checkout session page
+
+    }
+    finally{
+      setDatesAvailabilityCheck(false)
+    }
   };
 
   useEffect(() => {
@@ -127,6 +154,7 @@ const SinglePropertyPage = () => {
               stayForNoDays={stayForNoDays}
               checkoutLoginButton={checkoutLoginButton}
               handleReserve={handleReserve}
+              datesAvailabilityCheck={datesAvailabilityCheck}
             />
           </div>
         </div>

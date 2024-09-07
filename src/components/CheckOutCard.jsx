@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Spinner } from "./ui/Spinner";
 
 const CheckOutCard = ({
   propertyData,
@@ -19,6 +20,7 @@ const CheckOutCard = ({
   checkoutLoginButton,
   handleReserve,
   user,
+  datesAvailabilityCheck
 }) => {
   return (
     <div className="relative">
@@ -89,6 +91,7 @@ const CheckOutCard = ({
                       onClick={handleReserve}
                       className="w-full bg-red-500  text-white hover:bg-[#DD1062] "
                     >
+                      {datesAvailabilityCheck && <Spinner className={"text-white"} size={"small"} />}
                       {checkoutLoginButton}
                     </Button>
                     <div className="flex  items-center justify-between text-neutral-700 mt-3">

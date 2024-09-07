@@ -16,7 +16,6 @@ const App = () => {
     const checkTokenValidity = async () => {
       try {
         const { success } = await verifyToken(user?.accessToken);
-        console.log(success);
         if (!success) {
           dispatch(clearUser());
           dispatch(clearQuery());
