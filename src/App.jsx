@@ -6,6 +6,8 @@ import { verifyToken } from "./api/UserApi";
 import { clearUser } from "./slice/authSlice";
 import { clearQuery } from "./slice/querySlice";
 import SinglePropertyPage from "./pages/SinglePropertyPage";
+import SuccessPage from "./pages/SuccessPage";
+import FailedTransactionPage from "./pages/FailedTransactionPage";
 
 const App = () => {
   const user = useSelector((state) => state.auth.user);
@@ -34,6 +36,8 @@ const App = () => {
     <Routes>
       <Route path="/" exact element={<HomePage />} />
       <Route path="/:propertyId" exact element={<SinglePropertyPage />} />
+      <Route path="/SuccessFullCheckOut/:propertyId" exact element={<SuccessPage/>}/>
+      <Route path="/FailedCheckOut" exact element={<FailedTransactionPage/>}/>
     </Routes>
   );
 };

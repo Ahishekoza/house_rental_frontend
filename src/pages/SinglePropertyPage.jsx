@@ -10,6 +10,7 @@ import SiteLayout from "@/Layout/SiteLayout";
 import { formaDatesAndGetDaysDifference } from "../../utils/date_format_days_difference.js";
 import CheckOutCard from "@/components/CheckOutCard.jsx";
 import { checkAvailability } from "@/api/RentalApi.js";
+import { stripePaymentCheckout } from "@/api/PaymentApi.js";
 
 const SinglePropertyPage = () => {
   const user = useSelector((state) => state.auth.user);
@@ -25,38 +26,55 @@ const SinglePropertyPage = () => {
   });
 
   const [stayForNoDays, setStayForNoDays] = useState(null);
-  const [datesAvailabilityCheck,setDatesAvailabilityCheck] = useState(false)
+  const [datesAvailabilityCheck, setDatesAvailabilityCheck] = useState(false);
 
   const checkoutLoginButton = user?.email
     ? "Reserve"
     : "Login to reserve the property";
 
   const handleReserve = async () => {
-    setDatesAvailabilityCheck(true)
+    setDatesAvailabilityCheck(true);
     // -- property_Id , tenant , startDate , endDate
-    try{
+    try {
       const { iso_from_Date, iso_to_Date } = formaDatesAndGetDaysDifference(
         date?.from,
         date?.to,
         true
       );
-  
+
+      
+
       const { success } = await checkAvailability(
         propertyId,
         iso_from_Date,
         iso_to_Date
       );
-  
+
       if (!success) {
         // @TODO :-- Add a toast to show the available dates for the property
-        
       }
 
       // ----@TODO:-- Let make this page a stripe checkout session page
+      else {
+        const propertyImages = propertyData.images.map((image) => {
+          return image.url;
+        });
 
-    }
-    finally{
-      setDatesAvailabilityCheck(false)
+        const { url } = await stripePaymentCheckout(
+          propertyId,
+          propertyData.title,
+          propertyData.description,
+          propertyImages,
+          stayForNoDays * propertyData.price,
+          user?.accessToken
+        );
+
+        window.location.href = url;
+      }
+
+      // navigate('/SuccessFullCheckOut',{state:{propertyId:propertyId,startDate:iso_from_Date,endDate:iso_to_Date}})
+    } finally {
+      setDatesAvailabilityCheck(false);
     }
   };
 
