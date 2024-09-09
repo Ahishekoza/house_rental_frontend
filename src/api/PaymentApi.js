@@ -8,7 +8,9 @@ export const stripePaymentCheckout = async (
   propertyDescription,
   propertyImages,
   totalAmount,
-  token
+  token,
+  startDate,
+  endDate
 ) => {
   try {
     const response = await axios.post(
@@ -19,6 +21,8 @@ export const stripePaymentCheckout = async (
         propertyDescription,
         propertyImages,
         totalAmount,
+        startDate,
+        endDate
       },
       {
         headers: {

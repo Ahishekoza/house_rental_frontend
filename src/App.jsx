@@ -36,7 +36,7 @@ const App = () => {
     <Routes>
       <Route path="/" exact element={<HomePage />} />
       <Route path="/:propertyId" exact element={<SinglePropertyPage />} />
-      <Route path="/SuccessFullCheckOut/:propertyId" exact element={<SuccessPage/>}/>
+      <Route path="/SuccessFullCheckOut/:propertyId/:startDate/:endDate" exact element={<SuccessPage/>}/>
       <Route path="/FailedCheckOut" exact element={<FailedTransactionPage/>}/>
     </Routes>
   );

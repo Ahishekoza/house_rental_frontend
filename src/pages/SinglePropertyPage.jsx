@@ -66,7 +66,9 @@ const SinglePropertyPage = () => {
           propertyData.description,
           propertyImages,
           stayForNoDays * propertyData.price,
-          user?.accessToken
+          user?.accessToken,
+          iso_from_Date,
+          iso_to_Date
         );
 
         window.location.href = url;
