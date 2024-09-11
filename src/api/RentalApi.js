@@ -15,10 +15,10 @@ export const checkAvailability = async(property_id,startDate,endDate) => {
     }
 }
 
-export const rentalProperty = async(property_id,tenant,start_date,end_date)=>{
+export const rentalProperty = async(property_id,startDate,endDate,tenant)=>{
     try {
-        const response = await axios.post(`${API_BASE_URL}/rent-property`,{property_id,tenant,start_date,end_date})
-
+        const response = await axios.post(`${API_BASE_URL}/rent-property`,{property_id,tenant,startDate,endDate})
+        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message);
