@@ -45,11 +45,9 @@ const SuccessPage = () => {
           endDate,
           user?._id
         );
-        if (success) {
-          setTimeout(() => {
-            navigate("/");
-          }, 3000);
-        }
+        // if (success) {
+          
+        // }
       } catch (error) {
         console.error("Error creating rental:", error);
       }
@@ -65,7 +63,7 @@ const SuccessPage = () => {
 
   return (
     <div className="h-screen w-full">
-      <div className="h-full flex justify-center items-center">
+      <div className="h-full flex flex-col justify-center items-center gap-5">
         <Card className="w-[400px]">
           <CardHeader>
             <CardTitle>
@@ -101,6 +99,10 @@ const SuccessPage = () => {
             </div>
           </CardContent>
         </Card>
+        <div className="flex justify-center items-center gap-32">
+          <span className="bg-red-400 text-white cursor-pointer p-2 rounded-sm shadow-md">Go to home</span>
+          <span className="bg-green-400 text-white cursor-pointer p-2 rounded-sm shadow-md" >Check Reservation</span>
+        </div>
       </div>
     </div>
   );

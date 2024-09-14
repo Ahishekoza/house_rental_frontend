@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FaAirbnb, FaUserCircle } from "react-icons/fa";
@@ -16,12 +17,12 @@ import { clearUser } from "@/slice/authSlice";
 import Filter from "./Filter";
 import { clearQuery, setQuery, setQuery_data } from "@/slice/querySlice";
 
-const Header = () => {
+const Header = ({ homePage }) => {
   const user = useSelector((state) => state.auth.user);
   const { query } = useSelector((state) => state.filter_queries);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [features, setFeatures] = useState(query?.features);
   const [filters, setFilters] = useState({
@@ -55,32 +56,31 @@ const Header = () => {
   // This useEffect will run whenever `query` changes, including after features are updated
   useEffect(() => {
     // Perform the actual property search here
-    const queryResult = async()=>{
-     if(query){
-      const {data} = await getProperties(query)
-      dispatch(setQuery_data(data))  
-     }
-    }
+    const queryResult = async () => {
+      if (query) {
+        const { data } = await getProperties(query);
+        dispatch(setQuery_data(data));
+      }
+    };
 
-    queryResult()
+    queryResult();
   }, [query]);
 
-
-  const handleLogout = async()=>{
-    dispatch(clearUser())
-    dispatch(clearQuery())
-    navigate('/')
-  }
+  const handleLogout = async () => {
+    dispatch(clearUser());
+    dispatch(clearQuery());
+    navigate("/");
+  };
 
   return (
     <div className="border-b-2 border-neutral-300 bg-white shadow-md">
       <div className="flex flex-col">
         {/* --Header and Search */}
         <div className="flex flex-row items-start justify-between py-5 container">
-          <div className="flex gap-0.5 text-red-500 text-2xl">
+          <Link to={'/'} className="flex gap-0.5 cursor-pointer text-red-500 text-2xl">
             <FaAirbnb className="text-4xl" />
             <span className="font-bold">airbnb</span>
-          </div>
+          </Link>
 
           <div>
             <Tabs
@@ -166,13 +166,15 @@ const Header = () => {
         <Separator className="border border-t-0 border-neutral-400" />
 
         {/* Features */}
-        <div className="container flex items-center gap-20">
-          <FeatureCarousel
-            setFeatures={setFeatures}
-            feature_selected={features}
-          />
-          {features && <Filter filters={filters} setFilters={setFilters} />}
-        </div>
+        {homePage && (
+          <div className="container flex items-center gap-20">
+            <FeatureCarousel
+              setFeatures={setFeatures}
+              feature_selected={features}
+            />
+            {features && <Filter filters={filters} setFilters={setFilters} />}
+          </div>
+        )}
       </div>
     </div>
   );

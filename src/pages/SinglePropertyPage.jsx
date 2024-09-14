@@ -100,7 +100,7 @@ const SinglePropertyPage = () => {
   return (
     // @TODO:- Manage a state for Header because header for home page is different and for others its different
     // @TODO:- Remove the className for the div because it is already present in SiteLayout once you finish with Header state management
-    <SiteLayout>
+    <SiteLayout  >
       {propertyData?.isloading ? (
         <div>Loading....</div>
       ) : (

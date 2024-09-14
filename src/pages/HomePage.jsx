@@ -7,7 +7,7 @@ const HomePage = () => {
   const query_results = useSelector((state) => state.filter_queries.query_data);
 
   return (
-    <SiteLayout>
+    <SiteLayout homePage={true}>
       {/* ---@TODO -- Disply Query_results */}
       <div className="grid grid-cols-4 space-x-2 ">
         {

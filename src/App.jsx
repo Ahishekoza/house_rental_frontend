@@ -8,10 +8,12 @@ import { clearQuery } from "./slice/querySlice";
 import SinglePropertyPage from "./pages/SinglePropertyPage";
 import SuccessPage from "./pages/SuccessPage";
 import FailedTransactionPage from "./pages/FailedTransactionPage";
+import AuthLayout from "./Layout/AuthLayout";
+
+// @TODO:-- ADD TOAST || ADD BUTTONS ON CHECKOUT PAGE || CHANGE THE HEADER FORMAT
 
 const App = () => {
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,8 +38,14 @@ const App = () => {
     <Routes>
       <Route path="/" exact element={<HomePage />} />
       <Route path="/:propertyId" exact element={<SinglePropertyPage />} />
-      <Route path="/SuccessFullCheckOut/:propertyId/:startDate/:endDate" exact element={<SuccessPage/>}/>
-      <Route path="/FailedCheckOut" exact element={<FailedTransactionPage/>}/>
+      <Route element={<AuthLayout />}>
+        <Route
+          path="/SuccessFullCheckOut/:propertyId/:startDate/:endDate"
+          exact
+          element={<SuccessPage />}
+        />
+      </Route>
+      <Route path="/FailedCheckOut" exact element={<FailedTransactionPage />} />
     </Routes>
   );
 };

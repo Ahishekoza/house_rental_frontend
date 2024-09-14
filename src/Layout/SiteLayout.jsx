@@ -5,10 +5,10 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
-const SiteLayout = ({ children }) => {
+const SiteLayout = ({ children,homePage }) => {
   return (
     <div>
-      <Header />
+      <Header homePage={homePage} />
       <main className="container py-5">{children}</main>
       {/* <Footer/>  */}
     </div>
