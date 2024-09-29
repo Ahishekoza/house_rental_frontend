@@ -11,9 +11,11 @@ import { formaDatesAndGetDaysDifference } from "../../utils/date_format_days_dif
 import CheckOutCard from "@/components/CheckOutCard.jsx";
 import { checkAvailability } from "@/api/RentalApi.js";
 import { stripePaymentCheckout } from "@/api/PaymentApi.js";
+import { useToast } from "@/hooks/use-toast.js";
 
 const SinglePropertyPage = () => {
   const user = useSelector((state) => state.auth.user);
+  const {toast} = useToast()
 
   const { propertyId } = useParams();
   const [propertyData, setPropertyData] = useState({
@@ -52,6 +54,11 @@ const SinglePropertyPage = () => {
 
       if (!success) {
         // @TODO :-- Add a toast to show the available dates for the property
+        toast({
+          color:"bg-red-500",
+          iconColor:"text-white hover:text-white",
+          description:`Hotel is already booked from ${iso_from_Date.split("T")[0]} to ${iso_to_Date.split("T")[0]}`
+        })
       }
 
       // ----@TODO:-- Let make this page a stripe checkout session page

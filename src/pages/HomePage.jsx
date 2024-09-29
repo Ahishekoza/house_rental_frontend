@@ -9,12 +9,14 @@ const HomePage = () => {
   return (
     <SiteLayout homePage={true}>
       {/* ---@TODO -- Disply Query_results */}
-      <div className="grid grid-cols-4 space-x-2 ">
-        {
-          query_results.map((query_result)=>{
-            return <PropertyCard query_result={query_result} key={query_result?._id}/>
-          })
-        }
+      <div className="grid grid-rows-12 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
+        {query_results.map((query_result) => {
+          return (
+            <PropertyCard query_result={query_result} key={query_result?._id} />
+          );
+        })}
+
+       
       </div>
     </SiteLayout>
   );

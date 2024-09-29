@@ -28,9 +28,11 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/slice/authSlice";
 import { Spinner } from "./ui/Spinner";
 import { maskEmail } from "@/extrautilities";
+import { useToast } from "../hooks/use-toast";
 
 const Login_Signup_Dialog = () => {
   const dispatch = useDispatch();
+ const {toast}  = useToast()
 
   const [isOpen, setIsOpen] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -158,6 +160,10 @@ const Login_Signup_Dialog = () => {
       dispatch(setUser(loggedInUser));
       setUserInfo({});
       setIsOpen(false);
+      toast({
+        color: "bg-green-700",
+        description: "User Logged In Successfully !",
+      });
     } finally {
       setIsLoading(false);
     }

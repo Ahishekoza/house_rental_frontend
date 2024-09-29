@@ -9,12 +9,12 @@ const PropertyCard = ({ query_result }) => {
   return (
     // @TODO :- Carousel Previous and Next Button 
     <Link to={`/${query_result?._id}`} className="w-[400px] h-[400px] cursor-pointer ">
-      <div className="w-full flex flex-col  h-full">
+      <div className="w-full flex flex-col h-full  ">
         <Carousel className="w-full h-full max-w-xs">
           <CarouselContent>
             {query_result?.images.map((image) => (
               <CarouselItem key={image?._id}>
-                <div className="w-full h-[400px] ">
+                <div className="w-full h-[300px] ">
                   {" "}
                   {/* Fixed dimensions */}
                   <img
