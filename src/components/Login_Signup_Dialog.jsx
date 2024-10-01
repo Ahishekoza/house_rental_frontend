@@ -161,7 +161,7 @@ const Login_Signup_Dialog = () => {
       setUserInfo({});
       setIsOpen(false);
       toast({
-        color: "bg-green-700",
+        color: "bg-green-500",
         description: "User Logged In Successfully !",
       });
     } finally {

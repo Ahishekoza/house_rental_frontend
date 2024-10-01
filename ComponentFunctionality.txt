@@ -1,1 +1,6 @@
 Login_Signup_Dialog:-- handles the login of the user from email verification to setting the password in the database
+
+----- Filter Functionality---
+when user selects the feature and then uses filter on it then my query has searchs data on both features and filters basis
+we have to run search data on the basis of the "QUERY" when users clicks on show button with the data count
+

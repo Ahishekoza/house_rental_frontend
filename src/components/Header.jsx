@@ -27,9 +27,19 @@ const Header = ({ homePage }) => {
   const [features, setFeatures] = useState(query?.features);
   const [filters, setFilters] = useState({
     place_type: query?.propertyType,
+    priceRange: query?.minPrice
   });
 
   // -- handle Search Based On Query
+  /**
+   * 
+   * @param {object} query
+   * @param {string} searchByRegion
+   * @param {number} totalGuests
+   * 
+   * @returns {Array}
+   *  
+   */
   const handleSearchQuery = async (query) => {
     await getProperties(query);
   };
@@ -46,9 +56,10 @@ const Header = ({ homePage }) => {
 
   const handleSearchQueryFilter = async () => {
     // Update query in the store with the new filters and features
-    dispatch(setQuery({ propertyType: filters?.place_type, features }));
+    dispatch(setQuery({ propertyType: filters?.place_type,minPrice:filters?.priceRange, features }));
   };
 
+  // -----
   useEffect(() => {
     handleSearchQueryFilter();
   }, [filters]);
@@ -77,7 +88,10 @@ const Header = ({ homePage }) => {
       <div className="flex flex-col">
         {/* --Header and Search */}
         <div className="flex flex-row items-start justify-between py-5 container">
-          <Link to={'/'} className="flex gap-0.5 cursor-pointer text-red-500 text-2xl">
+          <Link
+            to={"/"}
+            className="flex gap-0.5 cursor-pointer text-red-500 text-2xl"
+          >
             <FaAirbnb className="text-4xl" />
             <span className="font-bold">airbnb</span>
           </Link>
@@ -167,12 +181,16 @@ const Header = ({ homePage }) => {
 
         {/* Features */}
         {homePage && (
-          <div className="container flex items-center gap-20">
-            <FeatureCarousel
-              setFeatures={setFeatures}
-              feature_selected={features}
-            />
-            {features && <Filter filters={filters} setFilters={setFilters} />}
+          <div className="md:container flex flex-col md:flex-row items-center justify-between md:space-x-4 space-y-4 md:space-y-0 w-full relative">
+            <div className=" w-2/3 md:w-5/6 relative">
+              <FeatureCarousel
+                setFeatures={setFeatures}
+                feature_selected={features}
+              />
+            </div>
+            <div className="w-full md:w-1/6">
+              {features && <Filter filters={filters} setFilters={setFilters} />}
+            </div>
           </div>
         )}
       </div>

@@ -24,6 +24,9 @@ export const getProperties = async (query) => {
     params.set("propertyType", query.propertyType);
   }
 
+  if (query?.minPrice) {
+    params.set("minPrice", query.minPrice);
+  }
 
   try {
     const response = await axios.get(

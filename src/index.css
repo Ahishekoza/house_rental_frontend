@@ -22,3 +22,19 @@
 .image_hover_bg{
     @apply absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-opacity duration-300 rounded-l-lg
 }
+
+.separator_border{
+    @apply border-solid mb-3 border-neutral-500
+}
+
+.max_min_price_parent{
+    @apply flex items-center flex-col gap-2
+}
+
+.max_min_price_name{
+    @apply text-xs font-medium text-neutral-400
+}
+
+.max_min_price_container{
+    @apply w-24 h-10 p-2 flex justify-start items-center rounded-full border border-neutral-500
+}

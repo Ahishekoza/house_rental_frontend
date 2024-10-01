@@ -4,13 +4,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { Link } from "react-router-dom";
 const PropertyCard = ({ query_result }) => {
   return (
     // @TODO :- Carousel Previous and Next Button 
     <Link to={`/${query_result?._id}`} className="w-[400px] h-[400px] cursor-pointer ">
       <div className="w-full flex flex-col h-full  ">
-        <Carousel className="w-full h-full max-w-xs">
+        <Carousel plugins={[Autoplay({delay:1500})]} className="w-full h-full max-w-xs">
           <CarouselContent>
             {query_result?.images.map((image) => (
               <CarouselItem key={image?._id}>
